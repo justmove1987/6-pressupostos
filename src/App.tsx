@@ -1,7 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import ServiceCard from "./components/ServiceCard";
+
+type ServicesState = {
+  seo: boolean;
+  ads: boolean;
+  web: boolean;
+};
 
 type Service = {
-  id: string;
+  id: keyof ServicesState;
   name: string;
   price: number;
 };
@@ -13,44 +20,45 @@ const services: Service[] = [
 ];
 
 function App() {
-  const [selected, setSelected] = useState<string[]>([]);
+  const [selected, setSelected] = useState<ServicesState>({
+    seo: false,
+    ads: false,
+    web: false,
+  });
 
-  const handleToggle = (id: string) => {
-    setSelected(prev =>
-      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
-    );
+  const [total, setTotal] = useState(0);
+
+  const toggleService = (id: keyof ServicesState) => {
+    setSelected(prev => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
   };
 
-  const total = selected.reduce(
-    (sum, id) => sum + (services.find(s => s.id === id)?.price || 0),
-    0
-  );
+  useEffect(() => {
+    const newTotal = services.reduce(
+      (sum, service) => sum + (selected[service.id] ? service.price : 0),
+      0
+    );
+    setTotal(newTotal);
+  }, [selected]);
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4">
-      <h1 className="text-3xl font-bold text-center mb-8">Aconsegueix la millor qualitat</h1>
+      <div className="bg-[url('/src/assets/header-bg.png')] bg-cover bg-center text-black py-12 text-center rounded-lg shadow-md mb-8">
+        <h2 className="text-2xl font-bold">Aconsegueix la millor qualitat</h2>
+      </div>
 
       <div className="max-w-xl mx-auto space-y-4">
         {services.map(service => (
-          <div key={service.id} className="flex items-center justify-between bg-white shadow-md p-5 rounded-lg">
-            <div>
-              <h2 className="font-semibold text-lg">{service.name}</h2>
-              <p className="text-sm text-gray-500">Programació d'una web responsive completa</p>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <p className="text-xl font-bold">{service.price} €</p>
-              <label className="flex items-center space-x-1 text-sm">
-                <span>Afegir</span>
-                <input
-                  type="checkbox"
-                  checked={selected.includes(service.id)}
-                  onChange={() => handleToggle(service.id)}
-                  className="w-4 h-4"
-                />
-              </label>
-            </div>
-          </div>
+          <ServiceCard
+            key={service.id}
+            id={service.id}
+            name={service.name}
+            price={service.price}
+            selected={selected[service.id]}
+            onToggle={toggleService}
+          />
         ))}
       </div>
 
