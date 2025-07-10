@@ -3,6 +3,7 @@ import ServiceCard from "../components/ServiceCard";
 import Budgets from "./Budgets";
 import type { Budget, ServicesState } from "../types";
 
+
 const services = [
   { id: "seo", name: "Seo", price: 300 },
   { id: "ads", name: "Ads", price: 400 },
@@ -15,7 +16,7 @@ export default function Calculator() {
   const [languages, setLanguages] = useState(1);
   const [total, setTotal] = useState(0);
 
-  const [form, setForm] = useState({ name: "", client: "", phone: "", email: "" });
+  const [form, setForm] = useState({ client: "", phone: "", email: "" });
   const [budgets, setBudgets] = useState<Budget[]>(() => {
     const saved = localStorage.getItem("budgets");
     return saved ? JSON.parse(saved) : [];
@@ -41,7 +42,7 @@ export default function Calculator() {
 
     const newBudget: Budget = {
       id: Date.now(),
-      name: form.name,
+      name: "",
       client: form.client,
       phone: form.phone,
       email: form.email,
@@ -51,7 +52,7 @@ export default function Calculator() {
     };
 
     setBudgets(prev => [...prev, newBudget]);
-    setForm({ name: "", client: "", phone: "", email: "" });
+    setForm({ client: "", phone: "", email: "" });
     setSelected({ seo: false, ads: false, web: false });
     setPages(1);
     setLanguages(1);
@@ -91,13 +92,6 @@ export default function Calculator() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <input
             type="text"
-            placeholder="Nom del pressupost"
-            value={form.name}
-            onChange={e => setForm({ ...form, name: e.target.value })}
-            className="border p-2 rounded"
-          />
-          <input
-            type="text"
             placeholder="Nom del client"
             value={form.client}
             onChange={e => setForm({ ...form, client: e.target.value })}
@@ -130,3 +124,4 @@ export default function Calculator() {
     </div>
   );
 }
+
