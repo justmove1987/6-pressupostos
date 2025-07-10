@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import ServiceCard from "./components/ServiceCard";
 
 type ServicesState = {
@@ -19,7 +20,7 @@ const services: Service[] = [
   { id: "web", name: "Web", price: 500 },
 ];
 
-function App() {
+export default function Calculator() {
   const [selected, setSelected] = useState<ServicesState>({
     seo: false,
     ads: false,
@@ -50,10 +51,16 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4">
-      <div className="bg-[url('/src/assets/header-bg.png')] bg-cover bg-center text-center py-12 rounded-lg shadow mb-8">
-        <h1 className="text-3xl font-bold text-black">Aconsegueix la millor qualitat</h1>
+      {/* TÍTOL AMB FONS DECORATIU */}
+      <div
+        className="bg-[url('/src/assets/header-bg.png')] bg-cover bg-center text-center py-12 rounded-lg shadow mb-8"
+      >
+        <h1 className="text-3xl font-bold text-black">
+          Aconsegueix la millor qualitat
+        </h1>
       </div>
 
+      {/* TARGETES DE SERVEIS */}
       <div className="max-w-xl mx-auto space-y-4">
         {services.map(service => (
           <ServiceCard
@@ -73,11 +80,20 @@ function App() {
         ))}
       </div>
 
+      {/* TOTAL */}
       <div className="max-w-xl mx-auto mt-8 text-right text-2xl font-bold">
         Preu pressupostat: {total} €
+      </div>
+
+      {/* ENLLAÇ PER TORNAR */}
+      <div className="text-center mt-10">
+        <Link
+          to="/"
+          className="text-green-600 underline hover:text-green-800 transition"
+        >
+          Tornar a la benvinguda
+        </Link>
       </div>
     </div>
   );
 }
-
-export default App;
