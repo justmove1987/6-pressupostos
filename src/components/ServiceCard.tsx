@@ -1,19 +1,13 @@
-type ServicesState = {
-  seo: boolean;
-  ads: boolean;
-  web: boolean;
-};
-
 type Props = {
-  id: keyof ServicesState;
+  id: "seo" | "ads" | "web";
   name: string;
   price: number;
   selected: boolean;
-  onToggle: (id: keyof ServicesState) => void;
+  onToggle: (id: "seo" | "ads" | "web") => void;
   pages?: number;
   languages?: number;
-  onChangePages?: (value: number) => void;
-  onChangeLanguages?: (value: number) => void;
+  onChangePages?: (val: number) => void;
+  onChangeLanguages?: (val: number) => void;
 };
 
 export default function ServiceCard({
@@ -22,48 +16,43 @@ export default function ServiceCard({
   price,
   selected,
   onToggle,
-  pages,
-  languages,
+  pages = 1,
+  languages = 1,
   onChangePages,
   onChangeLanguages,
 }: Props) {
   return (
     <div
-      className={`bg-white shadow-md p-5 rounded-lg border-2 transition-all space-y-4 ${
+      className={`border rounded-lg p-6 shadow-sm transition-all duration-300 ${
         selected ? "border-green-400" : "border-transparent"
-      }`}
+      } bg-white`}
     >
-      <div className="flex items-start justify-between">
+      <div className="flex justify-between items-start">
         <div>
-          <h2 className="font-semibold text-lg">{name}</h2>
-          <p className="text-sm text-gray-500">
-            Programació d'una web responsive completa
-          </p>
+          <h3 className="text-lg font-semibold">{name}</h3>
+          <p className="text-sm text-gray-500">Programació d'una web responsive completa</p>
         </div>
-
-        <div className="flex flex-col items-end space-y-2">
-          <p className="text-xl font-bold">{price} €</p>
-          <label className="flex items-center space-x-1 text-sm">
-            <span>Afegir</span>
+        <div className="text-right">
+          <p className="text-2xl font-bold">{price} €</p>
+          <label className="inline-flex items-center mt-2">
             <input
               type="checkbox"
               checked={selected}
               onChange={() => onToggle(id)}
-              className="w-4 h-4 accent-green-500"
+              className="accent-green-500 w-5 h-5"
             />
+            <span className="ml-2 text-sm">Afegir</span>
           </label>
         </div>
       </div>
 
-      {/* Només per Web quan està seleccionat */}
-      {id === "web" && selected && onChangePages && onChangeLanguages && (
-        <div className="flex flex-col gap-4 pt-2 pl-4 pr-2">
-          {/* PÀGINES */}
-          <div className="flex items-center justify-between">
+      {id === "web" && selected && (
+        <div className="mt-6 space-y-4">
+          <div className="flex justify-between items-center">
             <span className="text-sm font-medium">Nombre de pàgines</span>
             <div className="flex items-center space-x-2">
               <button
-                onClick={() => onChangePages(Math.max(1, (pages || 1) - 1))}
+                onClick={() => onChangePages && onChangePages(Math.max(1, pages - 1))}
                 className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-lg hover:bg-gray-100"
               >
                 –
@@ -72,22 +61,18 @@ export default function ServiceCard({
                 {pages}
               </div>
               <button
-                onClick={() => onChangePages((pages || 1) + 1)}
+                onClick={() => onChangePages && onChangePages(pages + 1)}
                 className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-lg hover:bg-gray-100"
               >
                 +
               </button>
             </div>
           </div>
-
-          {/* LLENGUATGES */}
-          <div className="flex items-center justify-between">
+          <div className="flex justify-between items-center">
             <span className="text-sm font-medium">Nombre de llenguatges</span>
             <div className="flex items-center space-x-2">
               <button
-                onClick={() =>
-                  onChangeLanguages(Math.max(1, (languages || 1) - 1))
-                }
+                onClick={() => onChangeLanguages && onChangeLanguages(Math.max(1, languages - 1))}
                 className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-lg hover:bg-gray-100"
               >
                 –
@@ -96,7 +81,7 @@ export default function ServiceCard({
                 {languages}
               </div>
               <button
-                onClick={() => onChangeLanguages((languages || 1) + 1)}
+                onClick={() => onChangeLanguages && onChangeLanguages(languages + 1)}
                 className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-lg hover:bg-gray-100"
               >
                 +
