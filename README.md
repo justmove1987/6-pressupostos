@@ -1,69 +1,91 @@
-# React + TypeScript + Vite
+# 💰 Web Budget Calculator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern web application built with React + Vite to allow users and freelancers to calculate web project budgets interactively.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- ✅ Select from 3 core services: SEO, Ads, and Web Development
+- ✅ Customize the number of pages and languages for the Web service
+- ✅ Auto-calculated pricing based on selected services
+- ✅ Responsive and clean UI using TailwindCSS
+- ✅ Help popups for form clarity (pages/languages)
+- ✅ Budget generation with client name and contact info
+- ✅ LocalStorage persistence
+- ✅ View and delete previously generated budgets
+- ✅ React Router for multi-page navigation (Welcome ↔ Calculator)
 
-## Expanding the ESLint configuration
+## 🛠️ Technologies Used
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **React** (with TypeScript)
+- **Vite** (build tool)
+- **Tailwind CSS** (styling)
+- **React Router DOM** (routing)
+- **Lucide React** (icons)
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 📁 Project Structure
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+```bash
+src/
+├── assets/ # Backgrounds, icons, and other static files
+├── components/
+│ └── ServiceCard.tsx # Service selection component with counters
+├── pages/
+│ ├── Welcome.tsx # Landing page
+│ ├── Calculator.tsx # Main calculator form and budget logic
+│ └── Budgets.tsx # List of generated budgets
+├── styles/
+│ └── index.css # Tailwind directives
+├── App.tsx # Routes setup
+├── main.tsx # App entry point
+└── types.ts # Shared type definitions
+```
+## 🔢 Pricing Logic
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- **SEO**: 300 €
+- **Ads**: 400 €
+- **Web**: 500 € base +  
+  `(number of pages + number of languages) * 30 €`
+
+## 📦 Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/your-username/web-budget-calculator.git
+cd web-budget-calculator
+
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Install dependencies:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+npm install
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+
+3. Run the app locally:
+
+```bash
+npm run dev
+
+```
+
+
+## 🧪 Development Tips
+All form state is managed using React’s useState.
+
+Budgets are stored in localStorage and synchronized across sessions.
+
+Modals use Tailwind + conditional rendering.
+
+Use the Info icon next to Web service fields to trigger contextual help modals.
+
+
+## 📌 Future Improvements
+Form validation and error handling
+
+Export budgets to PDF
+
+Authentication for persistent user sessions
+
+Backend support for saving budgets online
