@@ -1,6 +1,13 @@
+import { Link } from "react-router-dom";
 import type { Budget } from "../types";
 
-export default function Budgets({ budgets }: { budgets: Budget[] }) {
+export default function Budgets({
+  budgets = [],
+  onDelete,
+}: {
+  budgets?: Budget[];
+  onDelete?: (id: number) => void;
+}) {
   return (
     <div className="mt-12">
       <h2 className="text-xl font-semibold mb-4 text-center">Pressupostos generats</h2>
@@ -8,15 +15,14 @@ export default function Budgets({ budgets }: { budgets: Budget[] }) {
       {budgets.length === 0 ? (
         <p className="text-center text-gray-500">Encara no s'ha creat cap pressupost.</p>
       ) : (
-        <div className="space-y-6">
-          {budgets.map(b => (
+        <div className="space-y-6 max-w-4xl mx-auto">
+          {budgets.map((b) => (
             <div
               key={b.id}
               className="bg-white p-6 rounded-lg shadow flex flex-col gap-4 sm:flex-row sm:justify-between"
             >
               <div>
                 <h3 className="text-lg font-semibold">{b.name}</h3>
-                <p className="text-sm text-gray-600">Client: {b.client}</p>
                 <p className="text-sm text-gray-600">Tel: {b.phone}</p>
                 <p className="text-sm text-gray-600">Email: {b.email}</p>
               </div>
@@ -28,11 +34,30 @@ export default function Budgets({ budgets }: { budgets: Budget[] }) {
                   ))}
                 </ul>
               </div>
-              <div className="text-right text-xl font-bold">{b.total} €</div>
+              <div className="text-right flex flex-col justify-between items-end">
+                <div className="text-xl font-bold">{b.total} €</div>
+                {onDelete && (
+                  <button
+                    onClick={() => onDelete(b.id)}
+                    className="mt-2 text-sm text-red-600 hover:text-red-800 underline"
+                  >
+                    Eliminar
+                  </button>
+                )}
+              </div>
             </div>
           ))}
         </div>
       )}
+
+      <div className="text-center mt-10">
+        <Link
+          to="/"
+          className="text-green-600 underline hover:text-green-800 transition"
+        >
+          Tornar a la benvinguda
+        </Link>
+      </div>
     </div>
   );
 }

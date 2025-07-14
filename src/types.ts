@@ -4,16 +4,15 @@ export type ServicesState = {
   web: boolean;
 };
 
-export type Budget = {
+export interface Budget {
   id: number;
   name: string;
-  client: string;
   phone: string;
   email: string;
   services: string[];
+  total: number;
   webConfig?: {
     pages: number;
     languages: number;
   };
-  total: number;
-};
+}
