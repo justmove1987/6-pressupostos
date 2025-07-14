@@ -51,7 +51,7 @@ src/
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/web-budget-calculator.git
+git clone https://github.com/justmove1987/6-pressupostos.git
 cd web-budget-calculator
 
 ```
