@@ -1,3 +1,5 @@
+import { Info } from "lucide-react";
+
 type Props = {
   id: "seo" | "ads" | "web";
   name: string;
@@ -8,6 +10,8 @@ type Props = {
   languages?: number;
   onChangePages?: (val: number) => void;
   onChangeLanguages?: (val: number) => void;
+  onHelpPages?: () => void;
+  onHelpLanguages?: () => void;
 };
 
 export default function ServiceCard({
@@ -16,76 +20,67 @@ export default function ServiceCard({
   price,
   selected,
   onToggle,
-  pages = 1,
-  languages = 1,
+  pages,
+  languages,
   onChangePages,
   onChangeLanguages,
+  onHelpPages,
+  onHelpLanguages,
 }: Props) {
   return (
-    <div
-      className={`border rounded-lg p-6 shadow-sm transition-all duration-300 ${
-        selected ? "border-green-400" : "border-transparent"
-      } bg-white`}
-    >
-      <div className="flex justify-between items-start">
+    <div className={`border rounded-lg p-6 shadow-sm ${selected ? "border-green-400" : "border-transparent"}`}>
+      <div className="flex justify-between items-center mb-4">
         <div>
-          <h3 className="text-lg font-semibold">{name}</h3>
-          <p className="text-sm text-gray-500">Programació d'una web responsive completa</p>
+          <h2 className="text-lg font-semibold">{name}</h2>
+          <p className="text-sm text-gray-600">Programació d'una web responsive completa</p>
         </div>
         <div className="text-right">
-          <p className="text-2xl font-bold">{price} €</p>
-          <label className="inline-flex items-center mt-2">
+          <div className="text-xl font-bold">{price} €</div>
+          <label className="text-sm text-gray-700 flex items-center gap-1">
             <input
               type="checkbox"
               checked={selected}
               onChange={() => onToggle(id)}
-              className="accent-green-500 w-5 h-5"
+              className="mr-2"
             />
-            <span className="ml-2 text-sm">Afegir</span>
+            Afegir
           </label>
         </div>
       </div>
 
       {id === "web" && selected && (
-        <div className="mt-6 space-y-4">
-          <div className="flex justify-between items-center">
-            <span className="text-sm font-medium">Nombre de pàgines</span>
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={() => onChangePages && onChangePages(Math.max(1, pages - 1))}
-                className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-lg hover:bg-gray-100"
-              >
-                –
-              </button>
-              <div className="min-w-[48px] h-8 px-3 flex items-center justify-center border border-gray-300 rounded-full">
-                {pages}
-              </div>
-              <button
-                onClick={() => onChangePages && onChangePages(pages + 1)}
-                className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-lg hover:bg-gray-100"
-              >
-                +
-              </button>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+          {/* Número de pàgines */}
+          <div>
+            <label className="text-sm font-medium flex items-center gap-1">
+              Nombre de pàgines
+              {onHelpPages && (
+                <button onClick={onHelpPages} type="button">
+                  <Info size={16} className="text-blue-600 hover:text-blue-800" />
+                </button>
+              )}
+            </label>
+            <div className="flex items-center gap-2 mt-1">
+              <button onClick={() => onChangePages?.(Math.max(1, (pages || 1) - 1))} className="w-6 h-6 rounded-full bg-gray-200 text-center">−</button>
+              <div className="border px-4 py-1 rounded">{pages}</div>
+              <button onClick={() => onChangePages?.((pages || 1) + 1)} className="w-6 h-6 rounded-full bg-gray-200 text-center">+</button>
             </div>
           </div>
-          <div className="flex justify-between items-center">
-            <span className="text-sm font-medium">Nombre de llenguatges</span>
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={() => onChangeLanguages && onChangeLanguages(Math.max(1, languages - 1))}
-                className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-lg hover:bg-gray-100"
-              >
-                –
-              </button>
-              <div className="min-w-[48px] h-8 px-3 flex items-center justify-center border border-gray-300 rounded-full">
-                {languages}
-              </div>
-              <button
-                onClick={() => onChangeLanguages && onChangeLanguages(languages + 1)}
-                className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-lg hover:bg-gray-100"
-              >
-                +
-              </button>
+
+          {/* Número de llenguatges */}
+          <div>
+            <label className="text-sm font-medium flex items-center gap-1">
+              Nombre de llenguatges
+              {onHelpLanguages && (
+                <button onClick={onHelpLanguages} type="button">
+                  <Info size={16} className="text-blue-600 hover:text-blue-800" />
+                </button>
+              )}
+            </label>
+            <div className="flex items-center gap-2 mt-1">
+              <button onClick={() => onChangeLanguages?.(Math.max(1, (languages || 1) - 1))} className="w-6 h-6 rounded-full bg-gray-200 text-center">−</button>
+              <div className="border px-4 py-1 rounded">{languages}</div>
+              <button onClick={() => onChangeLanguages?.((languages || 1) + 1)} className="w-6 h-6 rounded-full bg-gray-200 text-center">+</button>
             </div>
           </div>
         </div>

@@ -14,6 +14,7 @@ export default function Calculator() {
   const [pages, setPages] = useState(1);
   const [languages, setLanguages] = useState(1);
   const [total, setTotal] = useState(0);
+  const [showHelp, setShowHelp] = useState<"pages" | "languages" | false>(false);
 
   const [form, setForm] = useState({ name: "", phone: "", email: "" });
   const [budgets, setBudgets] = useState<Budget[]>(() => {
@@ -81,6 +82,8 @@ export default function Calculator() {
               languages,
               onChangePages: setPages,
               onChangeLanguages: setLanguages,
+              onHelpPages: () => setShowHelp("pages"),
+              onHelpLanguages: () => setShowHelp("languages"),
             })}
           />
         ))}
@@ -124,6 +127,27 @@ export default function Calculator() {
       </div>
 
       <Budgets budgets={budgets} onDelete={handleDelete} />
+
+      {showHelp && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg max-w-md text-center">
+            <h3 className="text-xl font-bold mb-2">
+              {showHelp === "pages" ? "Número de pàgines" : "Número de llenguatges"}
+            </h3>
+            <p className="text-sm text-gray-600">
+              {showHelp === "pages"
+                ? "Afegeix les pàgines que necessitarà el teu lloc web. Cada pàgina afegeix 30€ al pressupost."
+                : "Afegeix els llenguatges que que tindrà el teu projecte. El cost de cada llenguatge és de 30€."}
+            </p>
+            <button
+              className="mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              onClick={() => setShowHelp(false)}
+            >
+              Tancar
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
