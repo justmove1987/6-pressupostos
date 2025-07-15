@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import ServiceCard from "../components/ServiceCard";
 import Budgets from "./Budgets";
 import type { Budget, ServicesState } from "../types";
+
 
 const services = [
   { id: "seo", name: "Seo", price: 300 },
@@ -10,11 +12,14 @@ const services = [
 ];
 
 export default function Calculator() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [selected, setSelected] = useState<ServicesState>({ seo: false, ads: false, web: false });
   const [pages, setPages] = useState(1);
   const [languages, setLanguages] = useState(1);
   const [total, setTotal] = useState(0);
   const [showHelp, setShowHelp] = useState<"pages" | "languages" | false>(false);
+  const [isAnnual, setIsAnnual] = useState(false);
 
   const [form, setForm] = useState({ name: "", phone: "", email: "" });
   const [budgets, setBudgets] = useState<Budget[]>(() => {
@@ -23,17 +28,45 @@ export default function Calculator() {
   });
 
   useEffect(() => {
+    const seo = searchParams.get("seo") === "true";
+    const ads = searchParams.get("ads") === "true";
+    const web = searchParams.get("web") === "true";
+    const pages = parseInt(searchParams.get("pages") || "1");
+    const languages = parseInt(searchParams.get("languages") || "1");
+    const annual = searchParams.get("annual") === "true";
+
+    setSelected({ seo, ads, web });
+    setPages(isNaN(pages) ? 1 : pages);
+    setLanguages(isNaN(languages) ? 1 : languages);
+    setIsAnnual(annual);
+  }, [searchParams]);
+
+  useEffect(() => {
     const base = services.reduce(
       (sum, s) => sum + (selected[s.id as keyof ServicesState] ? s.price : 0),
       0
     );
     const webExtra = selected.web ? (pages + languages) * 30 : 0;
-    setTotal(base + webExtra);
-  }, [selected, pages, languages]);
+    const final = base + webExtra;
+    const discounted = isAnnual ? final * 0.8 : final;
+    setTotal(discounted);
+  }, [selected, pages, languages, isAnnual, setSearchParams]);
 
   useEffect(() => {
     localStorage.setItem("budgets", JSON.stringify(budgets));
   }, [budgets]);
+
+    useEffect(() => {
+    const params: Record<string, string> = {
+      seo: selected.seo.toString(),
+      ads: selected.ads.toString(),
+      web: selected.web.toString(),
+      pages: pages.toString(),
+      languages: languages.toString(),
+      annual: isAnnual.toString(),
+    };
+    setSearchParams(params);
+  }, [selected, pages, languages, isAnnual, setSearchParams]);
 
   const handleCreate = () => {
     const chosenServices = services
@@ -68,7 +101,23 @@ export default function Calculator() {
         <h1 className="text-3xl font-bold text-black">Aconsegueix la millor qualitat</h1>
       </div>
 
-      <div className="max-w-4xl mx-auto space-y-4">
+      <div className="flex justify-center items-center mb-6 gap-4">
+        <span className="text-sm">Pagament mensual</span>
+        <label className="inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            checked={isAnnual}
+            onChange={() => setIsAnnual(!isAnnual)}
+            className="sr-only peer"
+          />
+          <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-green-500 relative">
+            <div className="w-5 h-5 bg-white rounded-full absolute top-0.5 left-0.5 peer-checked:left-5 transition-all"></div>
+          </div>
+        </label>
+        <span className="text-sm">Pagament anual</span>
+      </div>
+
+      <div className="max-w-xl mx-auto space-y-4">
         {services.map(service => (
           <ServiceCard
             key={service.id}
@@ -77,6 +126,7 @@ export default function Calculator() {
             price={service.price}
             selected={selected[service.id as keyof ServicesState]}
             onToggle={id => setSelected(prev => ({ ...prev, [id]: !prev[id] }))}
+            isAnnual={isAnnual}
             {...(service.id === "web" && {
               pages,
               languages,
@@ -89,48 +139,42 @@ export default function Calculator() {
         ))}
       </div>
 
-      <div className="max-w-4xl mx-auto mt-8 text-right text-2xl font-bold">
-        Preu pressupostat: {total} €
+      <div className="max-w-xl mx-auto mt-8 text-right text-2xl font-bold">
+        Preu pressupostat: {total.toFixed(2)} €
       </div>
 
-      <div className="max-w-4xl mx-auto mt-12 mb-8 bg-white p-6 rounded-lg shadow space-y-4">
-  <h2 className="text-xl font-semibold">Demanar pressupost</h2>
+      <div className="max-w-4xl mx-auto mt-12 mb-8 bg-white p-6 rounded-lg shadow flex flex-wrap items-end gap-4">
+        <h2 className="text-xl font-semibold w-full">Demanar pressupost</h2>
+        <input
+          type="text"
+          placeholder="Nom del pressupost"
+          value={form.name}
+          onChange={e => setForm({ ...form, name: e.target.value })}
+          className="border p-2 rounded flex-1"
+        />
+        <input
+          type="text"
+          placeholder="Telèfon"
+          value={form.phone}
+          onChange={e => setForm({ ...form, phone: e.target.value })}
+          className="border p-2 rounded flex-1"
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={form.email}
+          onChange={e => setForm({ ...form, email: e.target.value })}
+          className="border p-2 rounded flex-1"
+        />
+        <button
+          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+          onClick={handleCreate}
+        >
+          Sol·licitar pressupost →
+        </button>
+      </div>
 
-  <div className="flex flex-col lg:flex-row gap-4 items-center">
-    <input
-      type="text"
-      placeholder="Nom del pressupost"
-      value={form.name}
-      onChange={e => setForm({ ...form, name: e.target.value })}
-      className="border p-2 rounded w-full lg:w-1/4"
-    />
-    <input
-      type="text"
-      placeholder="Telèfon"
-      value={form.phone}
-      onChange={e => setForm({ ...form, phone: e.target.value })}
-      className="border p-2 rounded w-full lg:w-1/4"
-    />
-    <input
-      type="email"
-      placeholder="Email"
-      value={form.email}
-      onChange={e => setForm({ ...form, email: e.target.value })}
-      className="border p-2 rounded w-full lg:w-1/4"
-    />
-    <button
-      className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 w-full lg:w-auto whitespace-nowrap"
-      onClick={handleCreate}
-    >
-      Sol·licitar pressupost →
-    </button>
-  </div>
-</div>
-
-{/* Separador */}
-<hr className="max-w-4xl mx-auto border-t border-dashed border-gray-300 my-10" />
-
-
+      <div className="border-t border-dotted border-gray-300 my-8"></div>
 
       <Budgets budgets={budgets} onDelete={handleDelete} />
 

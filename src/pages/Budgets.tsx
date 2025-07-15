@@ -68,6 +68,8 @@ export default function Budgets({ budgets = [], onDelete }: { budgets?: Budget[]
         </div>
       </div>
 
+      <div className="border-t border-dotted border-gray-300 my-8"></div>
+
       {sortedBudgets.length === 0 ? (
         <p className="text-center text-gray-500">Encara no s'ha creat cap pressupost.</p>
       ) : (
@@ -96,7 +98,10 @@ export default function Budgets({ budgets = [], onDelete }: { budgets?: Budget[]
 
               {/* Columna 3: Preu i botó */}
               <div className="text-right flex flex-col justify-between items-end">
-                <div className="text-xl font-bold">{b.total} €</div>
+                <div className="flex flex-col items-center">
+                  <span className="text-sm text-orange-500 font-semibold mb-1">Ahorra un 20%</span>
+                  <span className="text-2xl font-bold">{b.total} €</span>
+                </div>
                 <button
                   onClick={() => onDelete?.(b.id)}
                   className="mt-2 text-sm text-red-600 hover:text-red-800 underline"
