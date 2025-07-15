@@ -4,44 +4,65 @@ import type { Budget } from "../types";
 
 export default function Budgets({ budgets = [], onDelete }: { budgets?: Budget[], onDelete?: (id: number) => void }) {
   const [localBudgets, setLocalBudgets] = useState<Budget[]>(budgets);
-  const [sortMode, setSortMode] = useState<"original" | "name" | "date">("original");
+  const [sortMode, setSortMode] = useState<"original" | "name" | "date" | "total">("original");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [search, setSearch] = useState("");
 
   useEffect(() => {
     setLocalBudgets(budgets);
   }, [budgets]);
 
+  const toggleSort = (mode: "name" | "date" | "total") => {
+    if (sortMode === mode) {
+      setSortDirection(prev => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      setSortMode(mode);
+      setSortDirection("asc");
+    }
+  };
+
   const filteredBudgets = localBudgets.filter(b =>
     b.name.toLowerCase().includes(search.toLowerCase())
   );
 
   const sortedBudgets = [...filteredBudgets].sort((a, b) => {
-    if (sortMode === "name") return a.name.localeCompare(b.name);
-    if (sortMode === "date") return b.id - a.id;
-    return 0;
+    let result = 0;
+    if (sortMode === "name") result = a.name.localeCompare(b.name);
+    if (sortMode === "date") result = a.id - b.id;
+    if (sortMode === "total") result = a.total - b.total;
+    return sortDirection === "asc" ? result : -result;
   });
+
+  const getArrow = (mode: string) => {
+    return sortMode === mode ? (sortDirection === "asc" ? "▲" : "▼") : "";
+  };
 
   return (
     <div className="mt-12">
-      <div className="flex flex-wrap items-center justify-between mb-6 gap-4">
-        <h2 className="text-xl font-semibold text-center sm:text-left">Pressupostos generats</h2>
-        <input
-          type="text"
-          placeholder="Cerca per nom..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="border p-1 px-2 rounded text-sm"
-        />
-        <div className="flex gap-2">
-          <button onClick={() => setSortMode("name")} className="text-sm px-3 py-1 border rounded hover:bg-gray-100">
-            Ordenar per nom
-          </button>
-          <button onClick={() => setSortMode("date")} className="text-sm px-3 py-1 border rounded hover:bg-gray-100">
-            Ordenar per data
-          </button>
-          <button onClick={() => setSortMode("original")} className="text-sm px-3 py-1 border rounded hover:bg-gray-100">
-            Reiniciar ordre
-          </button>
+      <div className="max-w-4xl mx-auto mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <h2 className="text-2xl font-bold">Pressupostos</h2>
+          <div className="flex flex-wrap gap-2 items-center w-full sm:w-auto">
+            <input
+              type="text"
+              placeholder="🔍 Cerca per nom..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="border border-gray-300 rounded px-3 py-2 text-sm w-full sm:w-64"
+            />
+            <button onClick={() => toggleSort("name")} className="px-4 py-2 text-sm border rounded bg-white hover:bg-gray-100">
+              🔠 Nom {getArrow("name")}
+            </button>
+            <button onClick={() => toggleSort("date")} className="px-4 py-2 text-sm border rounded bg-white hover:bg-gray-100">
+              📅 Data {getArrow("date")}
+            </button>
+            <button onClick={() => toggleSort("total")} className="px-4 py-2 text-sm border rounded bg-white hover:bg-gray-100">
+              💶 Import {getArrow("total")}
+            </button>
+            <button onClick={() => { setSortMode("original"); setSortDirection("asc"); }} className="px-4 py-2 text-sm border rounded bg-white hover:bg-gray-100">
+              ♻️ Reinicia
+            </button>
+          </div>
         </div>
       </div>
 

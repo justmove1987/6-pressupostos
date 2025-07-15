@@ -68,7 +68,7 @@ export default function Calculator() {
         <h1 className="text-3xl font-bold text-black">Aconsegueix la millor qualitat</h1>
       </div>
 
-      <div className="max-w-xl mx-auto space-y-4">
+      <div className="max-w-4xl mx-auto space-y-4">
         {services.map(service => (
           <ServiceCard
             key={service.id}
@@ -89,11 +89,11 @@ export default function Calculator() {
         ))}
       </div>
 
-      <div className="max-w-xl mx-auto mt-8 text-right text-2xl font-bold">
+      <div className="max-w-4xl mx-auto mt-8 text-right text-2xl font-bold">
         Preu pressupostat: {total} €
       </div>
 
-      <div className="max-w-xl mx-auto mt-12 mb-8 bg-white p-6 rounded-lg shadow space-y-4">
+      <div className="max-w-4xl mx-auto mt-12 mb-8 bg-white p-6 rounded-lg shadow space-y-4">
         <h2 className="text-xl font-semibold">Demanar pressupost</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <input
