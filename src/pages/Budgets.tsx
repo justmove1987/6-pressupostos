@@ -18,34 +18,37 @@ export default function Budgets({
         <div className="space-y-6 max-w-4xl mx-auto">
           {budgets.map((b) => (
             <div
-              key={b.id}
-              className="bg-white p-6 rounded-lg shadow flex flex-col gap-4 sm:flex-row sm:justify-between"
-            >
-              <div>
-                <h3 className="text-lg font-semibold">{b.name}</h3>
-                <p className="text-sm text-gray-600">Tel: {b.phone}</p>
-                <p className="text-sm text-gray-600">Email: {b.email}</p>
-              </div>
-              <div className="text-sm">
-                <p className="font-medium">Serveis:</p>
-                <ul className="list-disc list-inside">
-                  {b.services.map((s, i) => (
-                    <li key={i}>{s}</li>
-                  ))}
-                </ul>
-              </div>
-              <div className="text-right flex flex-col justify-between items-end">
-                <div className="text-xl font-bold">{b.total} €</div>
-                {onDelete && (
-                  <button
-                    onClick={() => onDelete(b.id)}
-                    className="mt-2 text-sm text-red-600 hover:text-red-800 underline"
-                  >
-                    Eliminar
-                  </button>
-                )}
-              </div>
-            </div>
+  key={b.id}
+  className="bg-white p-6 rounded-lg shadow grid grid-cols-[1fr_1fr_auto] items-start gap-4"
+>
+  {/* Columna 1: Info del client */}
+  <div>
+    <h3 className="text-lg font-semibold">{b.name}</h3>
+    <p className="text-sm text-gray-600">Tel: {b.phone}</p>
+    <p className="text-sm text-gray-600">Email: {b.email}</p>
+  </div>
+
+  {/* Columna 2: Serveis */}
+  <div className="min-h-[64px]">
+    <p className="font-medium">Serveis:</p>
+    <ul className="list-disc list-inside">
+      {b.services.map((s, i) => (
+        <li key={i}>{s}</li>
+      ))}
+    </ul>
+  </div>
+
+  {/* Columna 3: Preu i botó */}
+  <div className="text-right flex flex-col justify-between items-end">
+    <div className="text-xl font-bold">{b.total} €</div>
+    <button
+      onClick={() => onDelete?.(b.id)}
+      className="mt-2 text-sm text-red-600 hover:text-red-800 underline"
+    >
+      Eliminar
+    </button>
+  </div>
+</div>
           ))}
         </div>
       )}
