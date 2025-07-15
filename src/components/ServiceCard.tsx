@@ -28,7 +28,7 @@ export default function ServiceCard({
   onHelpLanguages,
 }: Props) {
   return (
-    <div className={`border rounded-lg p-6 shadow-sm ${selected ? "border-green-400" : "border-transparent"}`}>
+    <div className={`border bg-white rounded-lg p-6 shadow-sm ${selected ? "border-green-400" : "border-transparent"}`}>
       <div className="flex justify-between items-center mb-4">
         <div>
           <h2 className="text-lg font-semibold">{name}</h2>

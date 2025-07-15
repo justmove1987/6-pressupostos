@@ -94,37 +94,43 @@ export default function Calculator() {
       </div>
 
       <div className="max-w-4xl mx-auto mt-12 mb-8 bg-white p-6 rounded-lg shadow space-y-4">
-        <h2 className="text-xl font-semibold">Demanar pressupost</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <input
-            type="text"
-            placeholder="Nom del pressupost"
-            value={form.name}
-            onChange={e => setForm({ ...form, name: e.target.value })}
-            className="border p-2 rounded"
-          />
-          <input
-            type="text"
-            placeholder="Telèfon"
-            value={form.phone}
-            onChange={e => setForm({ ...form, phone: e.target.value })}
-            className="border p-2 rounded"
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            value={form.email}
-            onChange={e => setForm({ ...form, email: e.target.value })}
-            className="border p-2 rounded"
-          />
-        </div>
-        <button
-          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-          onClick={handleCreate}
-        >
-          Sol·licitar pressupost →
-        </button>
-      </div>
+  <h2 className="text-xl font-semibold">Demanar pressupost</h2>
+
+  <div className="flex flex-col lg:flex-row gap-4 items-center">
+    <input
+      type="text"
+      placeholder="Nom del pressupost"
+      value={form.name}
+      onChange={e => setForm({ ...form, name: e.target.value })}
+      className="border p-2 rounded w-full lg:w-1/4"
+    />
+    <input
+      type="text"
+      placeholder="Telèfon"
+      value={form.phone}
+      onChange={e => setForm({ ...form, phone: e.target.value })}
+      className="border p-2 rounded w-full lg:w-1/4"
+    />
+    <input
+      type="email"
+      placeholder="Email"
+      value={form.email}
+      onChange={e => setForm({ ...form, email: e.target.value })}
+      className="border p-2 rounded w-full lg:w-1/4"
+    />
+    <button
+      className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 w-full lg:w-auto whitespace-nowrap"
+      onClick={handleCreate}
+    >
+      Sol·licitar pressupost →
+    </button>
+  </div>
+</div>
+
+{/* Separador */}
+<hr className="max-w-4xl mx-auto border-t border-dashed border-gray-300 my-10" />
+
+
 
       <Budgets budgets={budgets} onDelete={handleDelete} />
 
