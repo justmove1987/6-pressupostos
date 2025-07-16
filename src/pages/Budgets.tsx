@@ -90,9 +90,9 @@ export default function Budgets({ budgets = [], onDelete }: { budgets?: Budget[]
               <div className="min-h-[64px]">
                 <p className="font-medium">Serveis:</p>
                 <ul className="list-disc list-inside">
-                  {b.services.map((s, i) => (
-                    <li key={i}>{s}</li>
-                  ))}
+                {(b.services ?? []).map((s, i) => (
+                  <li key={i}>{s}</li>
+                ))}
                 </ul>
               </div>
 
